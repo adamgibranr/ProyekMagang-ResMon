@@ -9,6 +9,8 @@ function NetworkInfoPage() {
   const  {mac_address} = useParams();
 
   const [netSpeedArray, setNetSpeedArray] = useState(null);
+  const [ipAddress, setIpAddress] = useState(null);
+  const [macAddress, setMacAddress] = useState(null);
 
   useEffect(() => {
     axios.get("/api/computers/device-resources/"+mac_address).then((response) => {
@@ -18,6 +20,8 @@ function NetworkInfoPage() {
             time : index+1, x: JSON.parse(resource.net_io_counters).bytes_sent_speed, y: JSON.parse(resource.net_io_counters).bytes_recv_speed
         })
       ));
+      setIpAddress(response.data.data.ip_address);
+      setMacAddress(response.data.data.mac_address);
     });
 }, []);
 
@@ -25,10 +29,14 @@ function NetworkInfoPage() {
     <div>
         <div className="main_container">
             <div className="info_list">
-                <h3>Paket Terkirim : </h3>
-                <h3>Paket Diterima : </h3>
-                <h3>Byte Terkirim : </h3>
-                <h3>Byte Diterima : </h3>
+              <div className='label'>
+                <h3>IP Address :</h3>
+                <h3>MAC Address :</h3>
+              </div>
+              <div className='output'>
+                <h3><b>{ipAddress}</b></h3>
+                <h3><b>{macAddress}</b></h3>
+              </div>
 
             </div>
             <div className="info_gauge">
